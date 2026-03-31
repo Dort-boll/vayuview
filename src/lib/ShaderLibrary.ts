@@ -1,0 +1,66 @@
+export const SHADERS = {
+  // 1-10: Basic Patterns
+  spiral: `vec3 spiral() { vec2 uv = vUv - 0.5; float angle = atan(uv.y, uv.x); float radius = length(uv); float pattern = sin(radius * 15.0 - time * 2.0 + angle * 6.0); return vec3(pattern * 0.5 + 0.5); }`,
+  tunnel: `vec3 tunnel() { vec2 uv = vUv - 0.5; float radius = length(uv); float angle = atan(uv.y, uv.x); float pattern = sin(1.0/radius + time * 2.0 + angle * 3.0); return vec3(pattern * 0.5 + 0.5); }`,
+  noise: `vec3 noise() { vec2 uv = vUv; float pattern = fract(sin(dot(uv, vec2(12.9898, 78.233))) * 43758.5453); return vec3(pattern); }`,
+  wave: `vec3 wave() { vec2 uv = vUv; float pattern = sin(uv.x * 20.0 + time * 5.0) * sin(uv.y * 20.0 + time * 5.0); return vec3(pattern * 0.5 + 0.5); }`,
+  grid: `vec3 grid() { vec2 uv = vUv * 20.0; vec2 grid = abs(fract(uv - 0.5) - 0.5) / fwidth(uv); float line = min(grid.x, grid.y); return vec3(1.0 - min(line, 1.0)); }`,
+  kaleidoscope: `vec3 kaleidoscope() { vec2 uv = vUv - 0.5; float angle = atan(uv.y, uv.x); float radius = length(uv); angle = mod(angle, 3.14159 / 4.0); uv = vec2(cos(angle), sin(angle)) * radius; return vec3(sin(uv.x * 10.0 + time)); }`,
+  fractal: `vec3 fractal() { vec2 uv = vUv - 0.5; vec2 z = uv; for(int i = 0; i < 5; i++) { z = vec2(z.x*z.x - z.y*z.y, 2.0*z.x*z.y) + uv; } return vec3(length(z) * 0.1); }`,
+  chromatic: `vec3 chromatic() { vec2 uv = vUv; float r = sin(uv.x * 10.0 + time); float g = sin(uv.x * 10.0 + time + 0.5); float b = sin(uv.x * 10.0 + time + 1.0); return vec3(r, g, b); }`,
+  motion: `vec3 motion() { vec2 uv = vUv - 0.5; float pattern = sin(length(uv) * 20.0 - time * 5.0); return vec3(pattern); }`,
+  depth: `vec3 depth() { vec2 uv = vUv - 0.5; float pattern = 1.0 / length(uv + vec2(sin(time), cos(time)) * 0.2); return vec3(pattern * 0.1); }`,
+
+  // 11-20: Advanced Patterns
+  flicker: `vec3 flicker() { return vec3(sin(time * 20.0) * 0.5 + 0.5); }`,
+  pulse: `vec3 pulse() { return vec3(sin(length(vUv - 0.5) * 50.0 - time * 10.0) * 0.5 + 0.5); }`,
+  moire: `vec3 moire() { return vec3(sin(vUv.x * 100.0) * sin(vUv.y * 100.0)); }`,
+  snake: `vec3 snake() { return vec3(sin(vUv.x * 10.0 + time * 5.0 + vUv.y * 5.0)); }`,
+  hering: `vec3 hering() { return vec3(sin(atan(vUv.y - 0.5, vUv.x - 0.5) * 10.0)); }`,
+  particle: `vec3 particle() { return vec3(fract(sin(dot(vUv, vec2(12.9898, 78.233))) * 43758.5453) > 0.99 ? 1.0 : 0.0); }`,
+  refraction: `vec3 refraction() { return vec3(sin(vUv.x * 10.0 + time) * 0.5 + 0.5); }`,
+  shimmer: `vec3 shimmer() { return vec3(sin(vUv.x * 50.0 + time * 2.0) * sin(vUv.y * 50.0 + time * 2.0)); }`,
+  afterimage: `vec3 afterimage() { return vec3(sin(time * 0.1) * 0.5 + 0.5); }`,
+  conflict: `vec3 conflict() { return vec3(sin(vUv.x * 20.0 + time * 10.0) * sin(vUv.y * 20.0 - time * 10.0)); }`,
+
+  // 21-40: Vision Training Patterns
+  convergence: `vec3 convergence() { vec2 uv = vUv - 0.5; return vec3(sin(length(uv) * 50.0 - time * 5.0)); }`,
+  focusPulse: `vec3 focusPulse() { float focus = sin(time * 2.0) * 0.5 + 0.5; return vec3(focus); }`,
+  blurGrid: `vec3 blurGrid() { vec2 uv = vUv * 50.0; return vec3(sin(uv.x) * sin(uv.y)); }`,
+  flickerRing: `vec3 flickerRing() { float r = length(vUv - 0.5); return vec3(sin(r * 100.0 - time * 10.0)); }`,
+  dualSpeed: `vec3 dualSpeed() { return vec3(sin(vUv.x * 10.0 + time) * sin(vUv.y * 20.0 + time * 2.0)); }`,
+  noiseDepth: `vec3 noiseDepth() { vec2 uv = vUv; return vec3(fract(sin(dot(uv, vec2(12.9898, 78.233))) * 43758.5453) * 0.1); }`,
+  contrastInversion: `vec3 contrastInversion() { return vec3(1.0 - sin(time * 5.0)); }`,
+  edgeDetection: `vec3 edgeDetection() { vec2 uv = vUv; return vec3(length(fwidth(uv))); }`,
+  colorAdaptation: `vec3 colorAdaptation() { return vec3(sin(time * 0.5), cos(time * 0.5), sin(time * 0.5)); }`,
+  sharpening: `vec3 sharpening() { return vec3(sin(vUv.x * 100.0) * 0.5 + 0.5); }`,
+  zoomLens: `vec3 zoomLens() { vec2 uv = vUv - 0.5; return vec3(sin(length(uv) * 10.0 - time * 2.0)); }`,
+  distortionCorrection: `vec3 distortionCorrection() { vec2 uv = vUv - 0.5; return vec3(sin(uv.x * 10.0)); }`,
+  radialFocus: `vec3 radialFocus() { vec2 uv = vUv - 0.5; return vec3(sin(length(uv) * 20.0)); }`,
+  binocularSplit: `vec3 binocularSplit() { return vec3(vUv.x > 0.5 ? sin(time) : cos(time)); }`,
+  waveInterference: `vec3 waveInterference() { return vec3(sin(vUv.x * 30.0 + time) + sin(vUv.y * 30.0 + time)); }`,
+  symmetryBreak: `vec3 symmetryBreak() { return vec3(sin(vUv.x * 10.0 + time) * (vUv.y > 0.5 ? 1.0 : -1.0)); }`,
+  gazeResponsive: `vec3 gazeResponsive() { return vec3(sin(vUv.x * 10.0 + time)); }`,
+  fatigueDetection: `vec3 fatigueDetection() { return vec3(sin(time * 0.1)); }`,
+  chromaticShift: `vec3 chromaticShift() { return vec3(sin(time), cos(time), sin(time + 1.0)); }`,
+  neuralOscillation: `vec3 neuralOscillation() { return vec3(sin(time * 5.0)); }`,
+
+  // 41-50: Eye Development & Therapy Patterns
+  gaborPatch: `vec3 gaborPatch() { vec2 uv = vUv - 0.5; float env = exp(-((uv.x*uv.x) + (uv.y*uv.y)) * 20.0); float carrier = sin(uv.x * 100.0 + time * 5.0); return vec3(0.5 + 0.5 * env * carrier); }`,
+  checkerboardVEP: `vec3 checkerboardVEP() { vec2 uv = vUv * 20.0; float c = mod(floor(uv.x) + floor(uv.y), 2.0); float phase = step(0.5, fract(time * 2.0)); return vec3(abs(c - phase)); }`,
+  radialGrating: `vec3 radialGrating() { vec2 uv = vUv - 0.5; float angle = atan(uv.y, uv.x); float pattern = sin(angle * 20.0 + time * 2.0); return vec3(pattern > 0.0 ? 1.0 : 0.0); }`,
+  concentricRings: `vec3 concentricRings() { vec2 uv = vUv - 0.5; float radius = length(uv); float pattern = sin(radius * 100.0 - time * 5.0); return vec3(pattern > 0.0 ? 1.0 : 0.0); }`,
+  optokineticStripes: `vec3 optokineticStripes() { float pattern = sin(vUv.x * 50.0 + time * 10.0); return vec3(pattern > 0.0 ? 1.0 : 0.0); }`,
+  smoothPursuit: `vec3 smoothPursuit() { vec2 uv = vUv - 0.5; vec2 target = vec2(sin(time), cos(time * 0.7)) * 0.3; float dist = length(uv - target); return vec3(smoothstep(0.05, 0.04, dist)); }`,
+  saccadicJumps: `vec3 saccadicJumps() { vec2 uv = vUv - 0.5; float t = floor(time * 2.0); vec2 target = vec2(fract(sin(t)*43758.5453) - 0.5, fract(cos(t)*43758.5453) - 0.5) * 0.8; float dist = length(uv - target); return vec3(smoothstep(0.05, 0.04, dist)); }`,
+  contrastSensitivity: `vec3 contrastSensitivity() { float carrier = sin(vUv.y * 100.0); float contrast = vUv.x; return vec3(0.5 + 0.5 * carrier * contrast); }`,
+  randomDot: `vec3 randomDot() { vec2 uv = floor(vUv * 100.0); float noise = fract(sin(dot(uv, vec2(12.9898, 78.233) + floor(time*10.0))) * 43758.5453); return vec3(noise > 0.5 ? 1.0 : 0.0); }`,
+  visualCrowding: `vec3 visualCrowding() { vec2 uv = fract(vUv * 10.0) - 0.5; float dist = length(uv); float circle = smoothstep(0.3, 0.25, dist) - smoothstep(0.2, 0.15, dist); return vec3(circle); }`,
+  
+  // 51-55: Advanced Vision Therapy & Binocular Patterns
+  brockString: `vec3 brockString() { vec2 uv = vUv - 0.5; float line = smoothstep(0.01, 0.0, abs(uv.x - uv.y)); float bead1 = smoothstep(0.05, 0.04, length(uv - vec2(0.2, 0.2))); float bead2 = smoothstep(0.08, 0.07, length(uv + vec2(0.2, 0.2))); float bead3 = smoothstep(0.03, 0.02, length(uv)); return vec3(line + bead1*vec3(1.0,0.0,0.0) + bead2*vec3(0.0,1.0,0.0) + bead3*vec3(0.0,0.0,1.0)); }`,
+  antiSuppression: `vec3 antiSuppression() { vec2 uv = vUv * 20.0; float noise = fract(sin(dot(floor(uv), vec2(12.9898, 78.233)) + time) * 43758.5453); vec3 col = noise > 0.5 ? vec3(1.0, 0.0, 0.0) : vec3(0.0, 1.0, 0.0); return col * (sin(time * 4.0) * 0.5 + 0.5); }`,
+  maddoxRod: `vec3 maddoxRod() { float lines = sin(vUv.y * 200.0); float glow = exp(-abs(vUv.x - 0.5) * 10.0); return vec3(1.0, 0.1, 0.1) * smoothstep(0.0, 1.0, lines) * glow; }`,
+  dynamicAccommodation: `vec3 dynamicAccommodation() { vec2 uv = vUv - 0.5; float dist = length(uv); float focus = sin(time * 2.0) * 0.5 + 0.5; float rings = sin(dist * 100.0); float blur = smoothstep(focus - 0.1, focus + 0.1, dist); return vec3(mix(rings > 0.0 ? 1.0 : 0.0, 0.5, blur)); }`,
+  worthFourDot: `vec3 worthFourDot() { vec2 uv = vUv - 0.5; float top = smoothstep(0.05, 0.04, length(uv - vec2(0.0, 0.2))); float bottom = smoothstep(0.05, 0.04, length(uv - vec2(0.0, -0.2))); float left = smoothstep(0.05, 0.04, length(uv - vec2(-0.2, 0.0))); float right = smoothstep(0.05, 0.04, length(uv - vec2(0.2, 0.0))); return top*vec3(1.0,0.0,0.0) + bottom*vec3(1.0,1.0,1.0) + left*vec3(0.0,1.0,0.0) + right*vec3(0.0,1.0,0.0); }`
+};
