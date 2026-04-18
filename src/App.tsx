@@ -27,6 +27,7 @@ export default function App() {
   const [isControlsCollapsed, setIsControlsCollapsed] = useState(false);
 
   useEffect(() => {
+    document.title = 'Vayu View';
     const timer = setInterval(() => {
       setSessionTime(sessionTime + 1);
       if (isSafetyMode && sessionTime >= 300) {
