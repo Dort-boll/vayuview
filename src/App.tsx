@@ -8,6 +8,7 @@ import { useStore, VisionMode } from './store/useStore';
 import { motion, AnimatePresence } from 'motion/react';
 import VayuCanvas from './components/VayuCanvas';
 import GlassPanel from './components/GlassPanel';
+import IntroPage from './components/IntroPage';
 import { SHADERS } from './lib/ShaderLibrary';
 import { Settings, Eye, Shield, Zap, Maximize, Minimize, ChevronDown, ChevronUp } from 'lucide-react';
 
@@ -21,6 +22,7 @@ export default function App() {
     isSafetyMode, setIsSafetyMode
   } = useStore();
 
+  const [hasEntered, setHasEntered] = useState(false);
   const [activeTab, setActiveTab] = useState('controls');
   const [isUIVisible, setIsUIVisible] = useState(true);
   const [isNavCollapsed, setIsNavCollapsed] = useState(false);
@@ -28,6 +30,8 @@ export default function App() {
 
   useEffect(() => {
     document.title = 'Vayu View';
+    if (!hasEntered) return;
+    
     const timer = setInterval(() => {
       setSessionTime(sessionTime + 1);
       if (isSafetyMode && sessionTime >= 300) {
@@ -37,10 +41,14 @@ export default function App() {
       }
     }, 1000);
     return () => clearInterval(timer);
-  }, [sessionTime, isSafetyMode, setSessionTime]);
+  }, [sessionTime, isSafetyMode, setSessionTime, hasEntered]);
 
   const modes: VisionMode[] = ['precision', 'immersion', 'reaction', 'recovery'];
   const patternNames = Object.keys(SHADERS);
+
+  if (!hasEntered) {
+    return <IntroPage onEnter={() => setHasEntered(true)} />;
+  }
 
   return (
     <div className="fixed inset-0 w-full h-full bg-[#050505] text-white font-sans overflow-hidden flex flex-col">
